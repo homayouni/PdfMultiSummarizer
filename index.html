@@ -140,20 +140,20 @@
                     try {
 
 
-if (mjson['textsummery_3']) {
-    console.log(mjson['textsummery_3'], 'textsummery_3');
-    txsum_3 = txsum_3 === '' ? mjson['textsummery_3'] : txsum_3 + mjson['textsummery_3'];
-    // settextSummery(txsum + mjson['textsummery']);
-    // settextSummery(()=>textSummery ? mjson['textsummery']:textSummery+mjson['textsummery'])
-    settextSummery_3(txsum_3);
-    console.log("textsummery_3", txsum_3);
-}
-// return;
-
-} catch (err) {
-// console.log(' no   textsummery_3 yet');
-
-}
+                        if (mjson['textsummery_3']) {
+                            console.log(mjson['textsummery_3'], 'textsummery_3');
+                            txsum_3 = txsum_3 === '' ? mjson['textsummery_3'] : txsum_3 + mjson['textsummery_3'];
+                            // settextSummery(txsum + mjson['textsummery']);
+                            // settextSummery(()=>textSummery ? mjson['textsummery']:textSummery+mjson['textsummery'])
+                            settextSummery_3(txsum_3);
+                            console.log("textsummery_3", txsum_3);
+                        }
+                        // return;
+                        
+                        } catch (err) {
+                        // console.log(' no   textsummery_3 yet');
+                        
+                        }
                     try {
                         
                         if (file.name === mjson['file_name'] && mjson['percentage'] === 100) {
