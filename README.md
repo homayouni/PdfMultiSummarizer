@@ -9,7 +9,7 @@ The project is expected to summerize Pdf file content after uploading at fronten
 - Streaming responce 
 ### Usage :
   1. Downloade and install Ollama
-  2. Downlaode desired model for example "Llama 3 8B" by:
+  2. Downlaode desired model for example "gemma:2b" by:
   ```
   ollama pull gemma:2b
   ```
