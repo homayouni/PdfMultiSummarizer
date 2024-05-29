@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <title>PDF Suumarizer with two models</title>
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <meta charset="UTF-8">
+    <!-- 
+    <script src="https://unpkg.com/react@latest/umd/react.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@latest/babel.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@mui/material@latest/umd/material-ui.development.js"crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
+    -->
+    <!-- <script src="static/material-ui.development.js" crossorigin="anonymous"></script>-->
+
+    <script src="static/react.development.js" crossorigin="anonymous"></script>
+    <script src="static/react-dom.development.js"></script>
+    <script src="static/babel.min.js" crossorigin="anonymous"></script>
+    <!-- <script src="static/babel.min.js.map" crossorigin="anonymous"></script>-->
+    <!-- <script src="static/marked.min.js"></script> -->
+    <script data-plugins="transform-modules-umd" type="text/babel" data-presets="react" data-type="module"
+        src="static/site_footer.js"></script>
+    <script data-plugins="transform-modules-umd" type="text/babel" data-presets="react" data-type="module"
+        src="static/site_header.js"></script>
+
+
+</head>
+
+<body>
+    <div id="root"></div>
+    <script data-plugins="transform-modules-umd" type="text/babel" data-presets="react" data-type="module">
+        var txsum_1 = ''; var txsum_2 = '';var txsum_3 = '';
+        var UplId = 0;
+        const FileUploader = () => {
+
+            var [progress, setProgress] = React.useState(0);
+            var [uploadedfiles, setuploadedfiles] = React.useState([]);
+            // var [waiting_for_su, setuploadedfiles] = React.useState([]);
+            var [textSummery_1, settextSummery_1] = React.useState(null);
+            var [textSummery_2, settextSummery_2] = React.useState(null);
+            var [textSummery_3, settextSummery_3] = React.useState(null);
+            var [file, setFile] = React.useState(null);
+            var [filename, setFileName] = React.useState(null);
+            var [currentChunkIndex, setcurrentChunkIndex] = React.useState(null);
+
+            const webSocketReady = React.useRef(false);
+            const ws = React.useRef(null);
+
+            // if (!  webSocketReady){
+
+            // } 
+            // socket.binaryType = "arraybuffer";
+
+            //const socket = React.useRef(false);
+
+
+            var ChunkIndex = -1;
+            var totalChunks = -1;
+
+            var c = 0;
+            console.log("k FileUploader k");
+            const chunkSize = 1024 * 1024; // 1MB chunks
+            React.useEffect(() => {
+
+                ws.current = new WebSocket('ws://localhost:8000/ws');
+            }, []);
+            React.useEffect(() => {
+
+                console.log("k useEffect k");
+
+
+                ws.current.onopen = (event) => {
+                    webSocketReady.current = true;
+                    console.log("k WebSocket k");
+                };
+                ws.current.onmessage = async function (event) {
+                    console.log("onmessage");
+                    try {
+                        var mjson = {};
+                        await event.data.text().then(txt => mjson = JSON.parse(txt));
+
+                        console.log("rec json", mjson);
+                        // return true;
+                    } catch (e) {
+
+                        // console.log('JSON.parse', event.data);
+                        // console.log(err);
+                        return;
+                    }
+
+
+
+                    try {
+                        if (file.name === mjson['file_name'] && mjson['percentage'] < 100 && mjson['percentage'] > 0) {
+
+                            setProgress(mjson['percentage']);
+                        }
+
+                    } finally {
+                        // always runs
+                    }
+                    try {
+
+
+                        if (mjson['textsummery_1']) {
+                            console.log(mjson['textsummery_1'], 'textsummery_1');
+                            txsum_1 = txsum_1 === '' ? mjson['textsummery_1'] : txsum_1 + mjson['textsummery_1'];
+                            // settextSummery(txsum + mjson['textsummery']);
+                            // settextSummery(()=>textSummery ? mjson['textsummery']:textSummery+mjson['textsummery'])
+                            settextSummery_1(txsum_1);
+                            console.log("textsummery_1", txsum_1);
+                        }
+                        // return;
+
+                    } catch (err) {
+                        // console.log(' no   textsummery_1 yet');
+
+                    }
+                    try {
+
+
+                        if (mjson['textsummery_2']) {
+                            console.log(mjson['textsummery_2'], 'textsummery_2');
+                            txsum_2 = txsum_2 === '' ? mjson['textsummery_2'] : txsum_2 + mjson['textsummery_2'];
+                            // settextSummery(txsum + mjson['textsummery']);
+                            // settextSummery(()=>textSummery ? mjson['textsummery']:textSummery+mjson['textsummery'])
+                            settextSummery_2(txsum_2);
+                            console.log("textsummery_2", txsum_2);
+                        }
+                        // return;
+
+                    } catch (err) {
+                        // console.log(' no   textsummery_2 yet');
+
+                    }
+                    try {
+
+
+if (mjson['textsummery_3']) {
+    console.log(mjson['textsummery_3'], 'textsummery_3');
+    txsum_3 = txsum_3 === '' ? mjson['textsummery_3'] : txsum_3 + mjson['textsummery_3'];
+    // settextSummery(txsum + mjson['textsummery']);
+    // settextSummery(()=>textSummery ? mjson['textsummery']:textSummery+mjson['textsummery'])
+    settextSummery_3(txsum_3);
+    console.log("textsummery_3", txsum_3);
+}
+// return;
+
+} catch (err) {
+// console.log(' no   textsummery_3 yet');
+
+}
+                    try {
+                        
+                        if (file.name === mjson['file_name'] && mjson['percentage'] === 100) {
+                            
+
+
+
+                            try {
+
+                                setuploadedfiles([{
+                                    file_name: mjson['file_name'],
+                                    file_path: mjson['file_path'],
+                                    Show_pdf_embedded: false,
+                                    UpId: UplId++,
+                                }, ...uploadedfiles]);
+                                
+                                // uploadedfiles.push({
+                                //     file_name: mjson['file_name'],
+                                //     file_path: mjson['file_path']
+                                // });
+                                setProgress(100);
+
+                            }
+
+                            catch (err) {
+                                // console.log('error   setuploadedfiles', event.data);
+                                // console.log(err);
+
+                            }
+
+
+
+
+
+                            // return;
+                        }
+                        try {
+                            
+                            if (file.name === mjson['file_name'] && mjson['received_chunk_index'] === ChunkIndex) {
+                                ChunkIndex = ChunkIndex + 1;
+                                setcurrentChunkIndex(ChunkIndex);
+
+                                if (ChunkIndex < totalChunks) {
+
+                                    console.log(ChunkIndex);
+                                    console.log(totalChunks);
+                                    console.log((ChunkIndex / totalChunks) * 100);
+                                    //setProgress((currentChunk / totalChunks) * 100);
+                                    readNextChunk(ChunkIndex);
+                                } else {
+                                    // setProgress(100);
+                                    console.log("totalChunks have been  sent");
+                                    //??? socket.close();
+                                }
+
+                            } else if (file.name === mjson['file_name'] && mjson['received_chunk_index'] !== ChunkIndex) {
+                                //enable upload;
+                                console.log(err, "receive:", mjson['received_chunk_index'], "send :", ChunkIndex, event.data);
+                                ChunkIndex = -1;
+                                var answer = window.confirm("Err sending , resend ?");
+                                if (answer) {
+                                    sendFile();
+                                }
+                                else {
+
+                                    setcurrentChunkIndex(0);
+                                    return;
+                                }
+
+                            }
+                        } catch (err) {
+                            // console.log('not in uploading ');
+                        }
+
+                    } catch (err) {
+                        // console.log('not in uploading ', err, event.data);
+                    }
+                };
+                ws.current.onclose = (event) => {
+                    console.log("The connection has been closed successfully.");
+                };
+                ws.current.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+            }, [, file, txsum_1, txsum_2, txsum_3, textSummery_1, textSummery_2,textSummery_3]);
+            const handleFileChange = (e) => {
+                let sf = e.target.files[0];
+                setFile(e.target.files[0]);
+                //setProgress(20);
+                setFileName(e.target.files[0].name);
+                console.log(sf.name);
+                totalChunks = Math.ceil(sf.size / chunkSize);
+
+
+            };
+            const readNextChunk = async (Chunkindex) => {
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    // var ab = new ArrayBuffer();
+                    var base64 = btoa(
+                        new Uint8Array(e.target.result)
+                            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                    );
+                    //ab = e.target.result;
+                    let jsonchunk = {
+                        chunk_index: ChunkIndex,
+                        chunk_data: base64,//btoa(e.target.result),//.split('base64,')[1],// await convertToBase64(e.target.result),
+                        file_name: file.name,
+                        total_file_size: file.size,
+                        chunk_size: e.target.byteLength //e.target.result.byteLength
+                    };
+                    // if (socket.OPEN) {
+
+                    ws.current.send(JSON.stringify(jsonchunk));
+                    // }
+
+                    // setUploadedChunks(currentChunkIndex);
+                };
+                const start = Chunkindex * chunkSize;
+                const end = Math.min(start + chunkSize, file.size);
+                reader.readAsArrayBuffer(file.slice(start, end)); //readAsArrayBuffer  readAsDataURL
+            };
+
+
+            const sendFile = () => {
+                txsum_1 = ''; txsum_2 = '';txsum_3 = '';
+                // socket.send(file.size);
+                // self.txsum_1='';
+                settextSummery_1(txsum_1);
+                settextSummery_2(txsum_2);                
+                settextSummery_3(txsum_3);
+                // Disable upload;
+
+
+                totalChunks = Math.ceil(file.size / chunkSize);
+ 
+                ChunkIndex = 0;
+                setcurrentChunkIndex(0);
+                let start = 0;
+                let end = Math.min(chunkSize, file.size);
+
+                if (webSocketReady) {
+
+                    readNextChunk(ChunkIndex);
+
+                }
+
+
+                //readNextChunk();
+            };
+
+
+            function embedPdf(index) {
+                const nextuploadedfiles = uploadedfiles.map((uf, i) => {
+                    if (i === index) {
+                        let toggle = uf.Show_pdf_embedded ? false : true;
+                        return {
+                            ...uf,
+                            Show_pdf_embedded: toggle,
+                        };
+                    } else {
+
+                        return uf;
+                    }
+                });
+                // Re-render with the new array
+                setuploadedfiles(nextuploadedfiles);
+            };
+            return (
+
+                <div>
+
+
+                    <input type="file" onChange={handleFileChange} />
+                    <button onClick={sendFile}>Upload</button>
+
+                    {progress > 0 && <div>Progress: {progress}%</div>}
+                    {filename !== null && <div>filename: {filename}</div>}
+
+                    {textSummery_1 === '' && <span><h1>summary by Ollama  using llama3</h1>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 14">
+                            <rect fill="#1BCDFF" stroke="#1BCDFF" stroke-width="2" width="2" height="2" x="1" y="6">
+                                <animate attributeName="opacity" calcMode="spline" dur="3.1" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.6"></animate></rect>
+                            <rect fill="#1BCDFF" stroke="#1BCDFF" stroke-width="2" width="2" height="2" x="6" y="6">
+                                <animate attributeName="opacity" calcMode="spline" dur="3.1" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></rect>
+                            <rect fill="#1BCDFF" stroke="#1BCDFF" stroke-width="2" width="2" height="2" x="12" y="6">
+                                <animate attributeName="opacity" calcMode="spline" dur="3.1" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0.2"></animate></rect>
+                            <rect fill="#1BCDFF" stroke="#1BCDFF" stroke-width="2" width="2" height="2" x="18" y="6">
+                                <animate attributeName="opacity" calcMode="spline" dur="3.1" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></rect>
+                        </svg>
+                    </span>}
+                    {textSummery_1 && <div>  <span><h1>summary by Ollama  using llama3</h1>{textSummery_1}</span></div>}
+                    {textSummery_2 === '' && <span><h1>summary by HuggingFace using Falconsai/text_summarization</h1>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 14">
+                            <rect fill="#1BCDFF" stroke="#1BCDFF" stroke-width="2" width="2" height="2" x="1" y="6">
+                                <animate attributeName="opacity" calcMode="spline" dur="3.1" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.6"></animate></rect>
+                            <rect fill="#1BCDFF" stroke="#1BCDFF" stroke-width="2" width="2" height="2" x="6" y="6">
+                                <animate attributeName="opacity" calcMode="spline" dur="3.1" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></rect>
+                            <rect fill="#1BCDFF" stroke="#1BCDFF" stroke-width="2" width="2" height="2" x="12" y="6">
+                                <animate attributeName="opacity" calcMode="spline" dur="3.1" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0.2"></animate></rect>
+                            <rect fill="#1BCDFF" stroke="#1BCDFF" stroke-width="2" width="2" height="2" x="18" y="6">
+                                <animate attributeName="opacity" calcMode="spline" dur="3.1" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></rect>
+                        </svg>
+                    </span>}
+
+                    {textSummery_2 && <div>  <span><h1>summary by HuggingFace using Falconsai/text_summarization</h1>{textSummery_2}</span></div>}
+
+
+                    {textSummery_3 && <div>  <span><h1>summary by HuggingFace using Falconsai/text_summarization</h1>{textSummery_2}</span></div>}
+
+                    <ul>
+                        {uploadedfiles.map((uploadedfile, i) => (
+                            <li key={uploadedfile.UpId} >{uploadedfile.UpId}-    <a href={uploadedfile.file_path} target="_blank"> {uploadedfile.file_name}   </a>
+
+                                <button onClick={() => {
+                                    embedPdf(i);
+                                }}>Expand The file {uploadedfile['UpId']}</button>
+                                {uploadedfile.Show_pdf_embedded && <object data={uploadedfile.file_path}
+                                    type="application/pdf" width="100%" height="500px">
+
+                                </object>
+                                }
+
+
+                            </li>
+
+                        ))}
+                    </ul>
+                </div>
+            );
+
+        };
+        import { Site_footer } from 'static/site_footer';
+        import { Site_header } from 'static/site_header';
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<div> 
+            <Site_header />
+            <FileUploader />
+            <Site_footer /> 
+            </div>);
+    </script>
+</body>
+
+</html>
