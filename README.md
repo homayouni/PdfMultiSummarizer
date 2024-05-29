@@ -11,7 +11,7 @@ The project is expected to summerize Pdf file content after uploading at fronten
   1. Downloade and install Ollama
   2. Downlaode desired model for example "Llama 3 8B" by:
   ```
-  ollama run gemma:2b
+  ollama pull gemma:2b
   ```
   3. Downlaode suitable Hugging Fcae model for example "Falconsai/text_summarization" by:
   ```
