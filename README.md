@@ -1,13 +1,13 @@
 # PdfMultiSummarizer
 The project is expected to summerize Pdf file content after uploading at frontend using React, babel/standalone, then being received in the Backend using Websocket to server based on Starlette framework using Ollama  (Gemma, Llama3,..), HugginFace ( Falcon/Text_summerizer) , GPT4All ( Models..)
-## Features:
-  -Sequential Chunked large/huge files upload using Websocket with verifiaction and uploade progress,
-  -Addressing uploaded file at the server ,
-  -Using React, babel/standalone at the Frontend to be able to use React without need of running node server
-  -Using Starlette Framework at the Backend
-  -Using multiple Opensource large language models locally hosted like Ollama, Huggingface llm models,  GPT4ALL
-  -Streaming responce 
-  ### Usage :
+## Conserns:
+- Sequential Chunked large/huge files upload using Websocket with verifiaction and uploade progress,
+- Addressing uploaded file at the server ,
+- Using React, babel/standalone at the Frontend to be able to use React without need of running node server
+- Using Starlette Framework at the Backend
+- Using multiple Opensource large language models (AI LLM) locally hosted like Ollama, Huggingface llm models,  GPT4ALL
+- Streaming responce 
+### Usage :
   1. Downloade and install Ollama
   2. Downlaode desired model for example "Llama 3 8B" by:
   ```
