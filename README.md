@@ -1,6 +1,6 @@
 # PdfMultiSummarizer
 The project is expected to summerize Pdf file content after uploading at frontend using React, babel/standalone, then being received in the Backend using Websocket to server based on Starlette framework using Ollama  (Gemma, Llama3,..), HugginFace ( Falcon/Text_summerizer) , GPT4All ( Models..)
-## Conserns:
+## Concerns:
 - Sequential Chunked large/huge files upload using Websocket with verifiaction and uploade progress,
 - Addressing uploaded file at the server ,
 - Using React, babel/standalone at the Frontend to be able to use React without need of running node server
